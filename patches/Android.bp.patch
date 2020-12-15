@@ -1,0 +1,15 @@
+diff --git a/Android.bp b/Android.bp
+index 737bcea..2ccbba4 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -14,6 +14,10 @@ rust_library {
+     rustlibs: [
+         "libfutures_core",
+     ],
++    apex_available: [
++        "//apex_available:platform",
++        "com.android.virt",
++    ],
+ }
+ 
+ // dependent_library ["feature_list"]
