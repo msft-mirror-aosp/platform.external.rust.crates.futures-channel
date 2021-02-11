@@ -21,4 +21,4 @@ rust_library {
 }
 
 // dependent_library ["feature_list"]
-//   futures-core-0.3.8 "alloc,std"
+//   futures-core-0.3.12 "alloc,std"
