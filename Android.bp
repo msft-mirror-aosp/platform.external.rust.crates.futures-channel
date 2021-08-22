@@ -57,9 +57,11 @@ rust_library {
     ],
     apex_available: [
         "//apex_available:platform",
+        "com.android.resolv",
         "com.android.virt",
     ],
+    min_sdk_version: "29",
 }
 
 // dependent_library ["feature_list"]
-//   futures-core-0.3.14 "alloc,std"
+//   futures-core-0.3.16 "alloc,std"
