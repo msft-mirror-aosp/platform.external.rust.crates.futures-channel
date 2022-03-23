@@ -1,13 +1,13 @@
 use futures::channel::{mpsc, oneshot};
 use futures::executor::{block_on, block_on_stream};
-use futures::future::{poll_fn, FutureExt};
-use futures::pin_mut;
-use futures::sink::{Sink, SinkExt};
+use futures::future::{FutureExt, poll_fn};
 use futures::stream::{Stream, StreamExt};
+use futures::sink::{Sink, SinkExt};
 use futures::task::{Context, Poll};
+use futures::pin_mut;
 use futures_test::task::{new_count_waker, noop_context};
-use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::thread;
 
 trait AssertSend: Send {}
@@ -77,7 +77,7 @@ fn send_shared_recv() {
 fn send_recv_threads() {
     let (mut tx, rx) = mpsc::channel::<i32>(16);
 
-    let t = thread::spawn(move || {
+    let t = thread::spawn(move|| {
         block_on(tx.send(1)).unwrap();
     });
 
@@ -200,14 +200,11 @@ fn tx_close_gets_none() {
 
 #[test]
 fn stress_shared_unbounded() {
-    #[cfg(miri)]
-    const AMT: u32 = 100;
-    #[cfg(not(miri))]
     const AMT: u32 = 10000;
     const NTHREADS: u32 = 8;
     let (tx, rx) = mpsc::unbounded::<i32>();
 
-    let t = thread::spawn(move || {
+    let t = thread::spawn(move|| {
         let result: Vec<_> = block_on(rx.collect());
         assert_eq!(result.len(), (AMT * NTHREADS) as usize);
         for item in result {
@@ -218,7 +215,7 @@ fn stress_shared_unbounded() {
     for _ in 0..NTHREADS {
         let tx = tx.clone();
 
-        thread::spawn(move || {
+        thread::spawn(move|| {
             for _ in 0..AMT {
                 tx.unbounded_send(1).unwrap();
             }
@@ -232,14 +229,11 @@ fn stress_shared_unbounded() {
 
 #[test]
 fn stress_shared_bounded_hard() {
-    #[cfg(miri)]
-    const AMT: u32 = 100;
-    #[cfg(not(miri))]
     const AMT: u32 = 10000;
     const NTHREADS: u32 = 8;
     let (tx, rx) = mpsc::channel::<i32>(0);
 
-    let t = thread::spawn(move || {
+    let t = thread::spawn(move|| {
         let result: Vec<_> = block_on(rx.collect());
         assert_eq!(result.len(), (AMT * NTHREADS) as usize);
         for item in result {
@@ -265,9 +259,6 @@ fn stress_shared_bounded_hard() {
 #[allow(clippy::same_item_push)]
 #[test]
 fn stress_receiver_multi_task_bounded_hard() {
-    #[cfg(miri)]
-    const AMT: usize = 100;
-    #[cfg(not(miri))]
     const AMT: usize = 10_000;
     const NTHREADS: u32 = 2;
 
@@ -306,9 +297,9 @@ fn stress_receiver_multi_task_bounded_hard() {
                             }
                             Poll::Ready(None) => {
                                 *rx_opt = None;
-                                break;
-                            }
-                            Poll::Pending => {}
+                                break
+                            },
+                            Poll::Pending => {},
                         }
                     }
                 } else {
@@ -319,6 +310,7 @@ fn stress_receiver_multi_task_bounded_hard() {
 
         th.push(t);
     }
+
 
     for i in 0..AMT {
         block_on(tx.send(i)).unwrap();
@@ -336,12 +328,7 @@ fn stress_receiver_multi_task_bounded_hard() {
 /// after sender dropped.
 #[test]
 fn stress_drop_sender() {
-    #[cfg(miri)]
-    const ITER: usize = 100;
-    #[cfg(not(miri))]
-    const ITER: usize = 10000;
-
-    fn list() -> impl Stream<Item = i32> {
+    fn list() -> impl Stream<Item=i32> {
         let (tx, rx) = mpsc::channel(1);
         thread::spawn(move || {
             block_on(send_one_two_three(tx));
@@ -349,7 +336,7 @@ fn stress_drop_sender() {
         rx
     }
 
-    for _ in 0..ITER {
+    for _ in 0..10000 {
         let v: Vec<_> = block_on(list().collect());
         assert_eq!(v, vec![1, 2, 3]);
     }
@@ -394,12 +381,9 @@ fn stress_close_receiver_iter() {
     }
 }
 
-#[cfg_attr(miri, ignore)] // Miri is too slow
 #[test]
 fn stress_close_receiver() {
-    const ITER: usize = 10000;
-
-    for _ in 0..ITER {
+    for _ in 0..10000 {
         stress_close_receiver_iter();
     }
 }
@@ -414,9 +398,6 @@ async fn stress_poll_ready_sender(mut sender: mpsc::Sender<u32>, count: u32) {
 #[allow(clippy::same_item_push)]
 #[test]
 fn stress_poll_ready() {
-    #[cfg(miri)]
-    const AMT: u32 = 100;
-    #[cfg(not(miri))]
     const AMT: u32 = 1000;
     const NTHREADS: u32 = 8;
 
@@ -426,7 +407,9 @@ fn stress_poll_ready() {
         let mut threads = Vec::new();
         for _ in 0..NTHREADS {
             let sender = tx.clone();
-            threads.push(thread::spawn(move || block_on(stress_poll_ready_sender(sender, AMT))));
+            threads.push(thread::spawn(move || {
+                block_on(stress_poll_ready_sender(sender, AMT))
+            }));
         }
         drop(tx);
 
@@ -444,7 +427,6 @@ fn stress_poll_ready() {
     stress(16);
 }
 
-#[cfg_attr(miri, ignore)] // Miri is too slow
 #[test]
 fn try_send_1() {
     const N: usize = 3000;
@@ -454,7 +436,7 @@ fn try_send_1() {
         for i in 0..N {
             loop {
                 if tx.try_send(i).is_ok() {
-                    break;
+                    break
                 }
             }
         }
@@ -560,8 +542,8 @@ fn is_connected_to() {
 
 #[test]
 fn hash_receiver() {
-    use std::collections::hash_map::DefaultHasher;
     use std::hash::Hasher;
+    use std::collections::hash_map::DefaultHasher;
 
     let mut hasher_a1 = DefaultHasher::new();
     let mut hasher_a2 = DefaultHasher::new();
