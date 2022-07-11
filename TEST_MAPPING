@@ -5,6 +5,9 @@
       "path": "external/rust/crates/anyhow"
     },
     {
+      "path": "external/rust/crates/futures-test"
+    },
+    {
       "path": "external/rust/crates/futures-util"
     },
     {
@@ -25,6 +28,21 @@
       "name": "doh_unit_test"
     },
     {
+      "name": "futures-channel_test_src_lib"
+    },
+    {
+      "name": "futures-channel_test_tests_channel"
+    },
+    {
+      "name": "futures-channel_test_tests_mpsc"
+    },
+    {
+      "name": "futures-channel_test_tests_mpsc-close"
+    },
+    {
+      "name": "futures-channel_test_tests_oneshot"
+    },
+    {
       "name": "virtualizationservice_device_test"
     }
   ],
@@ -37,6 +55,21 @@
     },
     {
       "name": "doh_unit_test"
+    },
+    {
+      "name": "futures-channel_test_src_lib"
+    },
+    {
+      "name": "futures-channel_test_tests_channel"
+    },
+    {
+      "name": "futures-channel_test_tests_mpsc"
+    },
+    {
+      "name": "futures-channel_test_tests_mpsc-close"
+    },
+    {
+      "name": "futures-channel_test_tests_oneshot"
     },
     {
       "name": "virtualizationservice_device_test"
