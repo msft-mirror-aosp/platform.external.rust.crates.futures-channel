@@ -38,6 +38,8 @@ optional = true
 default-features = false
 
 [dev-dependencies]
+futures = "0.3.21"
+futures-test = "0.3.21"
 
 [features]
 alloc = ["futures-core/alloc"]
