@@ -46,7 +46,7 @@ rust_test {
     host_supported: true,
     crate_name: "futures_channel",
     cargo_env_compat: true,
-    cargo_pkg_version: "0.3.25",
+    cargo_pkg_version: "0.3.26",
     srcs: ["src/lib.rs"],
     test_suites: ["general-tests"],
     auto_gen_config: true,
@@ -73,7 +73,7 @@ rust_defaults {
     name: "futures-channel_test_defaults",
     crate_name: "futures_channel",
     cargo_env_compat: true,
-    cargo_pkg_version: "0.3.25",
+    cargo_pkg_version: "0.3.26",
     test_suites: ["general-tests"],
     auto_gen_config: true,
     edition: "2018",
@@ -114,6 +114,16 @@ rust_test {
 }
 
 rust_test {
+    name: "futures-channel_test_tests_mpsc-size_hint",
+    defaults: ["futures-channel_test_defaults"],
+    host_supported: true,
+    srcs: ["tests/mpsc-size_hint.rs"],
+    test_options: {
+        unit_test: true,
+    },
+}
+
+rust_test {
     name: "futures-channel_test_tests_mpsc",
     defaults: ["futures-channel_test_defaults"],
     host_supported: true,
@@ -138,7 +148,7 @@ rust_library {
     host_supported: true,
     crate_name: "futures_channel",
     cargo_env_compat: true,
-    cargo_pkg_version: "0.3.25",
+    cargo_pkg_version: "0.3.26",
     srcs: ["src/lib.rs"],
     edition: "2018",
     features: [
@@ -158,5 +168,7 @@ rust_library {
         "com.android.resolv",
         "com.android.virt",
     ],
+    product_available: true,
+    vendor_available: true,
     min_sdk_version: "29",
 }
