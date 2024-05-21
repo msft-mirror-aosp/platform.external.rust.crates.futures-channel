@@ -49,7 +49,7 @@ rust_test {
     crate_name: "futures_channel",
     cargo_env_compat: true,
     cargo_pkg_version: "0.3.30",
-    srcs: ["src/lib.rs"],
+    crate_root: "src/lib.rs",
     test_suites: ["general-tests"],
     auto_gen_config: true,
     test_options: {
@@ -77,7 +77,7 @@ rust_test {
     crate_name: "channel",
     cargo_env_compat: true,
     cargo_pkg_version: "0.3.30",
-    srcs: ["tests/channel.rs"],
+    crate_root: "tests/channel.rs",
     test_suites: ["general-tests"],
     auto_gen_config: true,
     test_options: {
@@ -106,7 +106,7 @@ rust_test {
     crate_name: "mpsc",
     cargo_env_compat: true,
     cargo_pkg_version: "0.3.30",
-    srcs: ["tests/mpsc.rs"],
+    crate_root: "tests/mpsc.rs",
     test_suites: ["general-tests"],
     auto_gen_config: true,
     test_options: {
@@ -135,7 +135,7 @@ rust_test {
     crate_name: "mpsc_close",
     cargo_env_compat: true,
     cargo_pkg_version: "0.3.30",
-    srcs: ["tests/mpsc-close.rs"],
+    crate_root: "tests/mpsc-close.rs",
     test_suites: ["general-tests"],
     auto_gen_config: true,
     test_options: {
@@ -164,7 +164,7 @@ rust_test {
     crate_name: "mpsc_size_hint",
     cargo_env_compat: true,
     cargo_pkg_version: "0.3.30",
-    srcs: ["tests/mpsc-size_hint.rs"],
+    crate_root: "tests/mpsc-size_hint.rs",
     test_suites: ["general-tests"],
     auto_gen_config: true,
     test_options: {
@@ -193,7 +193,7 @@ rust_test {
     crate_name: "oneshot",
     cargo_env_compat: true,
     cargo_pkg_version: "0.3.30",
-    srcs: ["tests/oneshot.rs"],
+    crate_root: "tests/oneshot.rs",
     test_suites: ["general-tests"],
     auto_gen_config: true,
     test_options: {
@@ -222,7 +222,7 @@ rust_library {
     crate_name: "futures_channel",
     cargo_env_compat: true,
     cargo_pkg_version: "0.3.30",
-    srcs: ["src/lib.rs"],
+    crate_root: "src/lib.rs",
     edition: "2018",
     features: [
         "alloc",
